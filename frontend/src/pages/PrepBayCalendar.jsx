@@ -17,6 +17,9 @@ const PREP_BAYS = [
 
 const BAY_DEPARTMENTS = ["Lighting", "Video", "Rigging", "Automation"];
 
+// Stable fallback avoids recreating empty arrays on each render.
+const EMPTY_ARRAY = [];
+
 // Colour by department, not by individual job — every bay booked for the
 // same department shows the same colour, so patterns are visible at a glance.
 const DEPT_COLOURS = {
@@ -90,9 +93,9 @@ export default function PrepBayCalendar() {
     setYear(today.getFullYear()); setMonthIndex(today.getMonth());
   };
 
-  const bays = data?.bays || [];
-  const bookings = data?.bookings || [];
-  const manualBookings = data?.manual_bookings || [];
+  const bays = data?.bays ?? EMPTY_ARRAY;
+  const bookings = data?.bookings ?? EMPTY_ARRAY;
+  const manualBookings = data?.manual_bookings ?? EMPTY_ARRAY;
 
   const clipToMonth = useCallback((startStr, endStr) => {
     const start = new Date(startStr + "T00:00:00Z");
