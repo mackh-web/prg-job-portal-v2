@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PRG Job Portal — theme tokens per master spec §21.3 */
+@layer base {
+  :root {
+    /* Light Mode */
+    --background: 0 0% 100%;             /* #FFFFFF */
+    --foreground: 0 0% 9%;               /* near-black */
+    --card: 0 0% 100%;                   /* #FFFFFF */
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 340 86% 44%;              /* PRG Red #D11047 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 76%;               /* #C2C2C2 primary container */
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 32%;
+    --accent: 0 0% 76%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 0%;                   /* #000000 */
+    --input: 0 0% 0%;
+    --ring: 340 86% 44%;
+    --radius: 0.5rem;
+    color-scheme: light;
+  }
+  .dark {
+    /* Dark Mode (default per spec) */
+    --background: 0 0% 15%;              /* #262626 charcoal */
+    --foreground: 0 0% 100%;
+    --card: 0 0% 15%;                    /* #262626 secondary container */
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 340 86% 44%;              /* PRG Red */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 10%;               /* #191919 primary container */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 74% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 0%;                   /* pure black borders */
+    --input: 0 0% 0%;
+    --ring: 340 86% 44%;
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  html, body { height: 100%; }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: "ss01", "ss02";
+  }
+  h1, h2, h3, h4, h5, h6 { @apply font-display; letter-spacing: -0.01em; }
+  ::selection { background: #D11047; color: white; }
+  /* subtle noise grain overlay */
+  .prg-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+  [data-debug-wrapper="true"] { display: contents !important; }
+}
+
+/* utility */
+.font-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+.scrollbar-slim::-webkit-scrollbar { width: 8px; height: 8px; }
+.scrollbar-slim::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+.scrollbar-slim::-webkit-scrollbar-track { background: transparent; }
+
+/* button focus rings using PRG red */
+.focus-ring:focus-visible { outline: 2px solid #D11047; outline-offset: 2px; }

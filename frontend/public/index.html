@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#D11047" />
+    <meta name="description" content="PRG Job Portal — Production operations PWA for PRG UK." />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="icon" type="image/png" href="%PUBLIC_URL%/prg-logo-192.png" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/prg-logo-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PRG Portal" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>PRG Job Portal</title>
+    <script>
+      window.addEventListener("error", function (e) {
+        if (
+          e.error instanceof DOMException &&
+          e.error.name === "DataCloneError" &&
+          e.message &&
+          e.message.includes("PerformanceServerTiming")
+        ) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+        }
+      }, true);
+    </script>
+  </head>
+  <body class="dark">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+        // Once a new service worker takes control (after an update), reload
+        // once so the page actually picks up the fresh app code, instead of
+        // silently continuing to run the old version until the next manual
+        // navigation. Guarded against firing more than once per page load.
+        let refreshingAfterUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (refreshingAfterUpdate) return;
+          refreshingAfterUpdate = true;
+          window.location.reload();
+        });
+      }
+    </script>
+  </body>
+</html>
