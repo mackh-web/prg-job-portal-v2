@@ -244,7 +244,7 @@ function FaultLogs({ faultId, canEdit }) {
   const [partStatus, setPartStatus] = useState("Ordered");
   const [partNotes, setPartNotes] = useState("");
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const [t, p] = await Promise.all([
         api.get(`/faults/${faultId}/time-logs`),
@@ -253,8 +253,8 @@ function FaultLogs({ faultId, canEdit }) {
       setTimeLogs(t.data);
       setParts(p.data);
     } catch { /* ignore — 403 for ineligible roles is expected and silent */ }
-  };
-  useEffect(() => { load(); }, [faultId]);
+  }, [faultId]);
+  useEffect(() => { load(); }, [load]);
 
   const totalHours = timeLogs.reduce((sum, l) => sum + Number(l.hours || 0), 0);
   const totalCost = parts.reduce((sum, p) => sum + (Number(p.cost) || 0) * (Number(p.quantity) || 0), 0);

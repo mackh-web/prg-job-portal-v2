@@ -560,10 +560,10 @@ function Documents({ job }) {
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({ document_type: "Drawing", department: "Lighting", file_name: "", file_url: "" });
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try { const { data } = await api.get(`/jobs/${job.id}/documents`); setDocs(data); } catch { void 0; }
-  };
-  useEffect(() => { load(); }, [job.id]);
+  }, [job.id]);
+  useEffect(() => { load(); }, [load]);
 
   const add = async () => {
     try { await api.post(`/jobs/${job.id}/documents`, form); toast.success("Uploaded"); setShow(false); setForm({ document_type: "Drawing", department: "Lighting", file_name: "", file_url: "" }); load(); }
@@ -682,10 +682,10 @@ function PrepAdds({ job }) {
   const todayIso = new Date().toISOString().slice(0, 10);
   const inPrepWindow = !!(job.prep_date && job.ship_date && todayIso >= job.prep_date && todayIso <= job.ship_date);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try { const { data } = await api.get(`/jobs/${job.id}/prep-adds`); setRows(data); } catch { void 0; }
-  };
-  useEffect(() => { load(); }, [job.id]);
+  }, [job.id]);
+  useEffect(() => { load(); }, [load]);
 
   const openNew = () => {
     setEditingId(null);
@@ -810,8 +810,8 @@ function IdealPrep({ job }) {
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({ equipment_requirements: "", timeline: [{ day: "Day 1", description: "" }], special_requirements: "", notes: "" });
 
-  const load = async () => { try { const { data } = await api.get(`/jobs/${job.id}/ideal-prep`); setVersions(data); } catch { void 0; } };
-  useEffect(() => { load(); }, [job.id]);
+  const load = useCallback(async () => { try { const { data } = await api.get(`/jobs/${job.id}/ideal-prep`); setVersions(data); } catch { void 0; } }, [job.id]);
+  useEffect(() => { load(); }, [load]);
 
   const canSubmit = canSubmitIdealPrep(user, job);
   const canApprove = canApproveIdealPrep(user);
@@ -953,8 +953,8 @@ function Faults({ job }) {
   const [matchedEquipment, setMatchedEquipment] = useState(null);
   const [barcodeNotFound, setBarcodeNotFound] = useState(false);
 
-  const load = async () => { try { const { data } = await api.get(`/jobs/${job.id}/faults`); setRows(data); } catch { void 0; } };
-  useEffect(() => { load(); }, [job.id]);
+  const load = useCallback(async () => { try { const { data } = await api.get(`/jobs/${job.id}/faults`); setRows(data); } catch { void 0; } }, [job.id]);
+  useEffect(() => { load(); }, [load]);
 
   useEffect(() => {
     const trimmed = barcode.trim();

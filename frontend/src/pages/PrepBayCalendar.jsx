@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { api, formatErr } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -94,7 +94,7 @@ export default function PrepBayCalendar() {
   const bookings = data?.bookings || [];
   const manualBookings = data?.manual_bookings || [];
 
-  const clipToMonth = (startStr, endStr) => {
+  const clipToMonth = useCallback((startStr, endStr) => {
     const start = new Date(startStr + "T00:00:00Z");
     const end = new Date(endStr + "T00:00:00Z");
     const firstOfMonth = new Date(Date.UTC(year, monthIndex, 1));
@@ -106,7 +106,7 @@ export default function PrepBayCalendar() {
       startDay: clipStart.getUTCDate(), endDay: clipEnd.getUTCDate(),
       extendsLeft: start < firstOfMonth, extendsRight: end > lastOfMonth,
     };
-  };
+  }, [year, monthIndex, daysCount]);
 
   // Build a map: bay -> array of bar descriptors (job or manual), each with department-based colour
   const barsByBay = useMemo(() => {
@@ -138,7 +138,7 @@ export default function PrepBayCalendar() {
       });
     }
     return map;
-  }, [bays, bookings, manualBookings, year, monthIndex, daysCount]);
+  }, [bays, bookings, manualBookings, clipToMonth]);
 
   const todayIso = today.toISOString().slice(0, 10);
 

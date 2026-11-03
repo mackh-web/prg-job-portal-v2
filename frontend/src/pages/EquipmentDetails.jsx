@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { api, formatErr } from "@/lib/api";
 import { formatDateTime } from "@/lib/date";
@@ -19,7 +19,7 @@ export default function EquipmentDetails() {
   const [specsForm, setSpecsForm] = useState({ weight_kg: "", width_cm: "", height_cm: "", depth_cm: "" });
   const [saving, setSaving] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const { data } = await api.get("/equipment/by-type", { params: { fixture_type: decodedType } });
       setData(data);
@@ -30,8 +30,8 @@ export default function EquipmentDetails() {
         depth_cm: data.specs?.depth_cm ?? "",
       });
     } catch (e) { toast.error(formatErr(e?.response?.data?.detail)); }
-  };
-  useEffect(() => { setData(null); load(); }, [decodedType]);
+  }, [decodedType]);
+  useEffect(() => { setData(null); load(); }, [load]);
 
   const saveSpecs = async () => {
     setSaving(true);

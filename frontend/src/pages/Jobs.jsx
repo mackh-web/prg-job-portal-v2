@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api, formatErr } from "@/lib/api";
 import JobCard from "@/components/JobCard";
 import { useAuth } from "@/context/AuthContext";
@@ -18,14 +18,14 @@ export default function Jobs() {
   const canSeeAll = hasAnyRole(user, ROLES.OPERATIONS_MANAGER, ROLES.ADMIN, ROLES.PROJECT_MANAGER);
   const isAdmin = hasAnyRole(user, ROLES.ADMIN);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const params = { scope };
     if (status !== "All") params.status = status;
     const { data } = await api.get("/jobs", { params });
     setJobs(data);
-  };
+  }, [scope, status]);
 
-  useEffect(() => { load(); }, [scope, status]);
+  useEffect(() => { load(); }, [load]);
 
   return (
     <div className="space-y-6" data-testid="jobs-page">
